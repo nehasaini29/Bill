@@ -24,24 +24,19 @@
 //         body:JSON.stringify({username,password})
 //     })
 
-
-
 //   //   const data= await response.Json
 //   //   console.log("hi",data)
 //   //   if(HttpStatusCode.ok){
 //   //       navigate('/Service')
-        
+
 //   //   }
 //   //   else
 //   //   {console.log(error)}
-  
 
 //   //  } catch (error) {
 //   //   console.log('error',TypeError)
 //   //  }
 //   // };
-
-
 
 //   if (response.ok) {
 //     const data = await response.json();
@@ -54,9 +49,6 @@
 //   console.log('Error:', error);
 // }
 // };
-
-
-
 
 //   return (
 //     <div className="Container">
@@ -92,11 +84,11 @@
 
 // export default LoginSignup;
 
-
-
 import React, { useState } from "react";
 import "./LoginSignup.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { apiBaseUrl } from "../utils/costants";
+import { login } from "../utils/api";
 
 const LoginSignup = () => {
   const [username, setUserName] = useState("");
@@ -104,36 +96,51 @@ const LoginSignup = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch(`${apiBaseUrl}/login`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ username, password }),
+  //     });
+
+  //     if (response.ok) {
+  //       const token = await response.text(); // JWT token is plain text
+  //       console.log("Login successful:", token);
+  //       localStorage.setItem("jwtToken", token); // Store the token
+  //       navigate("/Service");
+
+  //       // if (response.ok) {
+  //       //   const data = await response.json();
+  //       //   console.log("Login successful:", data);
+  //       //   navigate('/Service');
+  //     } else {
+  //       const errorData = await response.json();
+  //       setError(errorData.error || "Login failed");
+  //     }
+  //   } catch (error) {
+  //     console.log("Error:", error);
+  //     setError("An error occurred during login. Please try again.");
+  //   }
+  // };
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:8080/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-      });
-
-
-      if (response.ok) {
-        const token = await response.text(); // JWT token is plain text
-        console.log("Login successful:", token);
-        localStorage.setItem('jwtToken', token); // Store the token
-        navigate('/Service');
-
-      // if (response.ok) {
-      //   const data = await response.json();
-      //   console.log("Login successful:", data);
-      //   navigate('/Service');
-      
-      } else {
-        const errorData = await response.json();
-        setError(errorData.error || "Login failed");
-      }
-    } catch (error) {
-      console.log('Error:', error);
-      setError("An error occurred during login. Please try again.");
+    const payload = {
+      username,
+      password,
+    };
+    const response = await login(payload);
+    if (response.status === 200) {
+      const token = await response.data.text(); // JWT token is plain text
+      console.log("Login successful:", token);
+      localStorage.setItem("jwtToken", token); // Store the token
+      navigate("/Service");
+    } else {
+      setError(response.data.error || "Login failed");
     }
   };
 
@@ -147,21 +154,11 @@ const LoginSignup = () => {
       <form onSubmit={handleLogin}>
         <div>
           <label>Email:</label>
-          <input
-            type="email"
-            value={username}
-            onChange={(e) => setUserName(e.target.value)}
-            required
-          />
+          <input type="email" value={username} onChange={(e) => setUserName(e.target.value)} required />
         </div>
         <div>
           <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         {error && <div className="error-message">{error}</div>}
         <button type="submit">Login</button>
@@ -171,10 +168,3 @@ const LoginSignup = () => {
 };
 
 export default LoginSignup;
-
-
-
-
-
-
-

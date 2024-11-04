@@ -1,8 +1,3 @@
-
-
-
-
-
 // import React, { useEffect, useState } from 'react';
 
 // const History = () => {
@@ -12,8 +7,6 @@
 //     fetchBills();
 //   }, []);
 
-
-
 //   const fetchBills = async () => {
 //     try {
 //       const response = await fetch('http://localhost:8080/api/allbills', {
@@ -21,10 +14,10 @@
 //           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`, // Send JWT token for authentication
 //         }
 //       });
-  
+
 //       const textResponse = await response.text();  // Get raw text response for debugging
 //       console.log('Raw response:', textResponse);  // Log the raw response
-  
+
 //       try {
 //         const data = JSON.parse(textResponse);  // Attempt to parse the response as JSON
 //         setBills(data);  // Set the bills if parsing is successful
@@ -35,7 +28,6 @@
 //       console.error('Error fetching bills:', error);
 //     }
 //   };
-
 
 //   return (
 //     <div>
@@ -52,8 +44,6 @@
 //               <th>Date</th>
 //             </tr>
 //           </thead>
-
-
 
 //           <tbody>
 //     {bills.map((bill, index) => (
@@ -76,10 +66,6 @@
 //     ))}
 //   </tbody>
 
-
-         
-
-
 //         </table>
 //       ) : (
 //         <p>No billing history available.</p>
@@ -89,8 +75,6 @@
 // };
 
 // export default History;
-
-
 
 //---------------wihtout filter date is working fine---------------
 
@@ -171,7 +155,6 @@
 
 // export default History;
 
-
 //-------------start and end date------------------
 
 // import React, { useEffect, useState } from 'react';
@@ -235,19 +218,19 @@
 //       {/* Date filter inputs */}
 //       <div className="filter">
 //         <label>
-//           Start Date: 
-//           <input 
-//             type="date" 
-//             value={startDate} 
-//             onChange={(e) => setStartDate(e.target.value)} 
+//           Start Date:
+//           <input
+//             type="date"
+//             value={startDate}
+//             onChange={(e) => setStartDate(e.target.value)}
 //           />
 //         </label>
 //         <label>
-//           End Date: 
-//           <input 
-//             type="date" 
-//             value={endDate} 
-//             onChange={(e) => setEndDate(e.target.value)} 
+//           End Date:
+//           <input
+//             type="date"
+//             value={endDate}
+//             onChange={(e) => setEndDate(e.target.value)}
 //           />
 //         </label>
 //       </div>
@@ -294,9 +277,7 @@
 
 // export default History;
 
-
 //--------------------------only one date-------------------
-
 
 // import React, { useEffect, useState } from 'react';
 // import './History.css';
@@ -349,7 +330,7 @@
 //       });
 //       setFilteredBills(filtered);
 //     } else {
-//       setFilteredBills(bills);     
+//       setFilteredBills(bills);
 //     }
 //   };
 
@@ -360,11 +341,11 @@
 //       {/* Date filter input */}
 //       <div className="filter">
 //         <label>
-//           Select Date: 
-//           <input 
-//             type="date" 
-//             value={selectedDate} 
-//             onChange={(e) => setSelectedDate(e.target.value)} 
+//           Select Date:
+//           <input
+//             type="date"
+//             value={selectedDate}
+//             onChange={(e) => setSelectedDate(e.target.value)}
 //           />
 //         </label>
 //       </div>
@@ -411,18 +392,16 @@
 
 // export default History;
 
-
-
 // --------------with name and contact---------
 
-
-import React, { useEffect, useState } from 'react';
-import './History.css';
+import React, { useEffect, useState } from "react";
+import "./History.css";
+import { apiBaseUrl } from "../../utils/costants";
 
 const History = () => {
   const [bills, setBills] = useState([]);
   const [filteredBills, setFilteredBills] = useState([]);
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState("");
 
   useEffect(() => {
     fetchBills();
@@ -434,30 +413,30 @@ const History = () => {
 
   const fetchBills = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/allbills', {
+      const response = await fetch(`${apiBaseUrl}/api/allbills`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
-        }
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
       });
 
       const textResponse = await response.text();
-      console.log('Raw response:', textResponse);
+      console.log("Raw response:", textResponse);
 
       try {
         const data = JSON.parse(textResponse);
         setBills(data);
-        setFilteredBills(data);  // Set initial filtered bills to all bills
+        setFilteredBills(data); // Set initial filtered bills to all bills
       } catch (jsonError) {
-        console.error('Error parsing JSON:', jsonError);
+        console.error("Error parsing JSON:", jsonError);
       }
     } catch (error) {
-      console.error('Error fetching bills:', error);
+      console.error("Error fetching bills:", error);
     }
   };
 
   const filterBills = () => {
     if (selectedDate) {
-      const filtered = bills.filter(bill => {
+      const filtered = bills.filter((bill) => {
         const billDate = new Date(bill.date);
         const selected = new Date(selectedDate);
         // Set the time to 00:00:00 for both dates to compare only the date part
@@ -467,7 +446,7 @@ const History = () => {
       });
       setFilteredBills(filtered);
     } else {
-      setFilteredBills(bills);     
+      setFilteredBills(bills);
     }
   };
 
@@ -478,12 +457,8 @@ const History = () => {
       {/* Date filter input */}
       <div className="filter">
         <label>
-          Select Date: 
-          <input 
-            type="date" 
-            value={selectedDate} 
-            onChange={(e) => setSelectedDate(e.target.value)} 
-          />
+          Select Date:
+          <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
         </label>
       </div>
 
@@ -497,8 +472,8 @@ const History = () => {
               <th>GST</th>
               <th>Final Total</th>
               <th>Date</th>
-              <th>Customer Name</th>  {/* New Customer Name column */}
-              <th>Contact Number</th>  {/* New Contact Number column */}
+              <th>Customer Name</th> {/* New Customer Name column */}
+              <th>Contact Number</th> {/* New Contact Number column */}
             </tr>
           </thead>
           <tbody>
@@ -532,4 +507,3 @@ const History = () => {
 };
 
 export default History;
-
